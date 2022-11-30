@@ -1,13 +1,19 @@
 import streamlit as st
 import pandas as pd
-from datetime import date
+import altair as alt
+import datetime
+import pytz
+import requests
 
-today = date.today()
-today_str = today.strftime("%b %d, %Y")
+utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+today_str = pst_now.strftime("%b %d, %Y")
+dailyBreadRes = requests.get('https://scs-app-backend-481f8.web.app/api/v1/daily_bread')
+dailyBreadRes = dailyBreadRes.json()
 
 st.title('SCS Daily Bread Dashboard')
-st.subheader(today_str)
-
+st.subheader(today_str + ' - ' + dailyBreadRes["bookName"] + ' ' + str(dailyBreadRes["chapterIdx"]+1))
+st.markdown("""---""")
 def check_password():
     """Returns `True` if the user had a correct password."""
 
@@ -44,7 +50,6 @@ def check_password():
         return True
 
 if check_password():
-    st.write("Here goes your normal Streamlit app...")
-    st.button("Click me")
-
+    log = pd.read_json('https://scs-app-backend-481f8.web.app/api/v1/daily_bread/reading_log?startDate=Oct13,2022')
+    st.bar_chart(data=log, x='date', y='readCounts')
 

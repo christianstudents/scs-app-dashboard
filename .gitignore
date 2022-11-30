@@ -1,0 +1,9 @@
+
+.streamlit/secrets.toml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/scs-app-dashboard.iml
+.idea/vcs.xml
+.DS_Store
+test.py
